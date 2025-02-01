@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест на Довбойоба</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Тест на IQ</h1>
+        <div id="quiz"></div>
+        <button onclick="startTest()">Почати тест</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "Яке число буде наступним у послідовності? 2, 6, 12, 20, ?", options: ["30", "28", "24", "32"], answer: "30" },
+            { q: "Знайдіть зайве слово: Собака, Кіт, Лев, Акула", options: ["Собака", "Кіт", "Лев", "Акула"], answer: "Акула" },
+            { q: "Яке слово логічно продовжує ряд? Весна, Літо, Осінь, ?", options: ["Грудень", "Зима", "Січень", "Сніг"], answer: "Зима" },
+            { q: "Якщо всі троянди – квіти, а всі квіти ростуть на землі, то що з цього випливає?", options: ["Усі троянди ростуть на землі", "Усі квіти – це троянди", "Троянди можуть рости у воді", "Всі рослини – це троянди"], answer: "Усі троянди ростуть на землі" },
+            { q: "Яке число пропущене? 5, 10, ?, 30, 40", options: ["15", "18", "20", "25"], answer: "20" },
+            { q: "Що важче: кілограм пір'я чи кілограм цегли?", options: ["Цегла", "Пір'я", "Однаково", "Залежить від умов"], answer: "Однаково" },
+            { q: "Яке число має продовжити ряд: 1, 4, 9, 16, ?", options: ["20", "25", "30", "36"], answer: "25" },
+            { q: "Яке слово зайве? Сонце, Зоря, Місяць, Автомобіль", options: ["Сонце", "Зоря", "Місяць", "Автомобіль"], answer: "Автомобіль" },
+            { q: "Яке число пропущене? 3, 6, 9, ?, 15", options: ["10", "11", "12", "13"], answer: "12" },
+            { q: "Скільки місяців у році мають 28 днів?", options: ["1", "6", "12", "9"], answer: "12" }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function startTest() {
+            score = 0;
+            currentQuestion = 0;
+            document.getElementById("result").innerText = "";
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                showResult();
+                return;
+            }
+
+            let q = questions[currentQuestion];
+            let quizDiv = document.getElementById("quiz");
+            quizDiv.innerHTML = `<div class='question'>${q.q}</div>`;
+            
+            let optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+            q.options.forEach(option => {
+                let button = document.createElement("button");
+                button.innerText = option;
+                button.onclick = () => checkAnswer(option);
+                optionsDiv.appendChild(button);
+            });
+            quizDiv.appendChild(optionsDiv);
+        }
+
+        function checkAnswer(answer) {
+            if (answer === questions[currentQuestion].answer) {
+                score++;
+            }
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function showResult() {
+            let message = "";
+            if (score <= 3) {
+                message = "Результат: " + score + "/10. Ну що ж, схоже, що ти довбойоб. Ти як Остап, що думає, що розумний, але...";
+            } else if (score <= 6) {
+                message = "Результат: " + score + "/10. Непогано! мінімальний довбойоб, але ще є куди рости!";
+            } else if (score <= 9) {
+                message = "Результат: " + score + "/10. Вау! Ти реально розумний, майже геній!";
+            } else {
+                message = "Результат: " + score + "/10. Ти справжній геній! Ти як Ейнштейн, тільки без вуса!";
+            }
+            document.getElementById("quiz").innerHTML = "";
+            document.getElementById("result").innerText = message;
+        }
+    </script>
+</body>
+</html>

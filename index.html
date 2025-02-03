@@ -3,71 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест на Довбойоба</title>
+    <title>Тест на IQ</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f3f4f6;
+            --text-color: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             padding: 20px;
         }
+
         .container {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
             max-width: 500px;
-            margin: auto;
+            text-align: center;
+            transition: all 0.3s ease;
         }
+
+        .container:hover {
+            transform: scale(1.02);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
         .question {
             font-size: 18px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
         }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
         .options button {
-            display: block;
-            width: 100%;
-            margin: 5px 0;
-            padding: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        .options button:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .options button:active {
+            transform: translateY(0);
+        }
+
         #result {
+            margin-top: 20px;
             font-size: 20px;
             font-weight: bold;
-            margin-top: 15px;
+            color: var(--secondary-color);
+        }
+
+        #start-btn, #restart-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        #start-btn:hover, #restart-btn:hover {
+            background-color: #27ae60;
+            transform: scale(1.05);
+        }
+
+        .progress {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .timer {
+            font-size: 16px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Тест на IQ</h1>
+        <h1>🧠 Тест на IQ: Перевір свій розум! 🤔</h1>
+        <div class="progress">
+            <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+        </div>
+        <div class="timer" id="timer">Час: 00:00</div>
         <div id="quiz"></div>
-        <button onclick="startTest()">Почати тест</button>
+        <button id="start-btn" onclick="startTest()">Почати тест</button>
         <div id="result"></div>
     </div>
 
     <script>
         const questions = [
+            // Previous questions
             { q: "Яке число буде наступним у послідовності? 2, 6, 12, 20, ?", options: ["30", "28", "24", "32"], answer: "30" },
             { q: "Знайдіть зайве слово: Собака, Кіт, Лев, Акула", options: ["Собака", "Кіт", "Лев", "Акула"], answer: "Акула" },
             { q: "Яке слово логічно продовжує ряд? Весна, Літо, Осінь, ?", options: ["Грудень", "Зима", "Січень", "Сніг"], answer: "Зима" },
-            { q: "Якщо всі троянди – квіти, а всі квіти ростуть на землі, то що з цього випливає?", options: ["Усі троянди ростуть на землі", "Усі квіти – це троянди", "Троянди можуть рости у воді", "Всі рослини – це троянди"], answer: "Усі троянди ростуть на землі" },
-            { q: "Яке число пропущене? 5, 10, ?, 30, 40", options: ["15", "18", "20", "25"], answer: "20" },
-            { q: "Що важче: кілограм пір'я чи кілограм цегли?", options: ["Цегла", "Пір'я", "Однаково", "Залежить від умов"], answer: "Однаково" },
-            { q: "Яке число має продовжити ряд: 1, 4, 9, 16, ?", options: ["20", "25", "30", "36"], answer: "25" },
-            { q: "Яке слово зайве? Сонце, Зоря, Місяць, Автомобіль", options: ["Сонце", "Зоря", "Місяць", "Автомобіль"], answer: "Автомобіль" },
-            { q: "Яке число пропущене? 3, 6, 9, ?, 15", options: ["10", "11", "12", "13"], answer: "12" },
-            { q: "В якому місяці року є хоча б 28 днів?", options: ["1", "6", "12", "9"], answer: "12" }
+            
+            // New advanced questions
+            { q: "Якщо А > В, В > С, то що можна сказати про А та С?", options: ["А > С", "С > А", "Нічого не можна сказати", "А = С"], answer: "А > С" },
+            { q: "Скільки разів літера 'А' зустрічається у слові 'МАТЕМАТИКА'?", options: ["2", "3", "4", "5"], answer: "3" },
+            { q: "Яке число зайве: 1, 4, 9, 16, 25, 36, 50?", options: ["1", "25", "36", "50"], answer: "50" },
+            { q: "Що буде, якщо повернути слово 'MUNDO' навпаки?", options: ["ODNUM", "MUNDO", "MUNDO", "UNDMO"], answer: "ODNUM" },
+            { q: "Яка наступна літера у послідовності? А, Г, Ж, ?", options: ["И", "Б", "К", "Д"], answer: "К" },
+            { q: "Якщо 3 кішки з'їдають 3 миші за 3 хвилини, скільки кішок потрібно, щоб з'їсти 12 мишей за 12 хвилин?", options: ["3", "4", "12", "6"], answer: "3" },
+            { q: "Що важче: 1 кг заліза чи 1 кг пір'я?", options: ["Залізо", "Пір'я", "Однаково", "Залежить від температури"], answer: "Однаково" }
         ];
 
         let currentQuestion = 0;
         let score = 0;
+        let startTime, endTime;
+        let timerInterval;
 
         function startTest() {
             score = 0;
             currentQuestion = 0;
+            startTime = new Date();
+            document.getElementById("start-btn").style.display = "none";
             document.getElementById("result").innerText = "";
+            document.getElementById("progress-bar").style.width = "0%";
+            startTimer();
             loadQuestion();
+        }
+
+        function startTimer() {
+            const timerDisplay = document.getElementById("timer");
+            timerInterval = setInterval(() => {
+                const currentTime = Math.floor((new Date() - startTime) / 1000);
+                const minutes = Math.floor(currentTime / 60).toString().padStart(2, '0');
+                const seconds = (currentTime % 60).toString().padStart(2, '0');
+                timerDisplay.innerText = `Час: ${minutes}:${seconds}`;
+            }, 1000);
         }
 
         function loadQuestion() {
@@ -78,17 +205,22 @@
 
             let q = questions[currentQuestion];
             let quizDiv = document.getElementById("quiz");
-            quizDiv.innerHTML = `<div class='question'>${q.q}</div>`;
+            quizDiv.innerHTML = `<div class='question fade-in'>${q.q}</div>`;
             
             let optionsDiv = document.createElement("div");
             optionsDiv.className = "options";
             q.options.forEach(option => {
                 let button = document.createElement("button");
                 button.innerText = option;
+                button.className = "fade-in";
                 button.onclick = () => checkAnswer(option);
                 optionsDiv.appendChild(button);
             });
             quizDiv.appendChild(optionsDiv);
+
+            // Update progress bar
+            const progressBar = document.getElementById("progress-bar");
+            progressBar.style.width = `${(currentQuestion / questions.length) * 100}%`;
         }
 
         function checkAnswer(answer) {
@@ -100,18 +232,37 @@
         }
 
         function showResult() {
+            clearInterval(timerInterval);
+            endTime = new Date();
+            const totalTime = Math.floor((endTime - startTime) / 1000);
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+
             let message = "";
+            let emoji = "";
+
             if (score <= 3) {
-                message = "Результат: " + score + "/10. Ну що ж, схоже, що ти довбойоб. Ти як Остап, що думає, що розумний, але...";
+                message = `Результат: ${score}/10. Ну що ж, є над чим попрацювати! 🤨`;
+                emoji = "🤨";
             } else if (score <= 6) {
-                message = "Результат: " + score + "/10. Непогано! мінімальний довбойоб, але ще є куди рости!";
+                message = `Результат: ${score}/10. Непоганий результат, але є потенціал! 🧐`;
+                emoji = "🧐";
             } else if (score <= 9) {
-                message = "Результат: " + score + "/10. Вау! Ти реально розумний, майже геній!";
+                message = `Результат: ${score}/10. Ви дуже розумна людина! 🤓`;
+                emoji = "🤓";
             } else {
-                message = "Результат: " + score + "/10. Ти справжній геній! Ти як Ейнштейн, тільки без вуса!";
+                message = `Результат: ${score}/10. Геній! Ви неперевершені! 🏆`;
+                emoji = "🏆";
             }
+
             document.getElementById("quiz").innerHTML = "";
-            document.getElementById("result").innerText = message;
+            document.getElementById("result").innerHTML = `
+                <div class="fade-in">
+                    <p>${message}</p>
+                    <p>Витрачено часу: ${minutes} хв ${seconds} сек ${emoji}</p>
+                    <button id="restart-btn" onclick="location.reload()">Пройти знову</button>
+                </div>
+            `;
         }
     </script>
 </body>
